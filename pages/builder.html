@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Schedule Builder — TerpAdvisor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/style.css"/>
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="nav-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-badge">UMD</span>
+      <span class="logo-text">TerpAdvisor</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html" class="nav-link">Home</a></li>
+      <li><a href="builder.html" class="nav-link active">Schedule Builder</a></li>
+      <li><a href="courses.html" class="nav-link">Course Search</a></li>
+      <li><a href="advisor.html" class="nav-link">AI Advisor</a></li>
+      <li><a href="audit.html" class="nav-link">Degree Audit</a></li>
+    </ul>
+    <a href="builder.html" class="cta-btn">Build My Schedule</a>
+    <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="../index.html">Home</a>
+    <a href="builder.html">Schedule Builder</a>
+    <a href="courses.html">Course Search</a>
+    <a href="advisor.html">AI Advisor</a>
+    <a href="audit.html">Degree Audit</a>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <p class="section-eyebrow">Schedule Builder</p>
+    <h1>Build your <em>ideal semester</em></h1>
+    <p>Tell us your goals and we'll generate a personalized UMD course schedule using live data from umd.io and PlanetTerp ratings.</p>
+  </div>
+</section>
+
+<main class="page-body">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:360px 1fr;gap:28px;align-items:start;">
+
+      <!-- ── LEFT: Inputs ─────────────────────────────── -->
+      <div id="inputPanel">
+
+        <div class="card">
+          <div class="card-title">About you</div>
+          <div class="field">
+            <label>Major</label>
+            <select id="bMajor">
+              <option value="CMSC">Computer Science (CMSC)</option>
+              <option value="MATH">Mathematics (MATH)</option>
+              <option value="BIOL">Biology (BIOL)</option>
+              <option value="CHEM">Chemistry (CHEM)</option>
+              <option value="PHYS">Physics (PHYS)</option>
+              <option value="BMGT">Business (BMGT)</option>
+              <option value="ENME">Mechanical Engineering (ENME)</option>
+              <option value="ENEE">Electrical Engineering (ENEE)</option>
+              <option value="PSYC">Psychology (PSYC)</option>
+              <option value="ECON">Economics (ECON)</option>
+              <option value="ENGL">English (ENGL)</option>
+              <option value="HIST">History (HIST)</option>
+              <option value="GVPT">Government &amp; Politics (GVPT)</option>
+              <option value="KNES">Kinesiology (KNES)</option>
+              <option value="SOCY">Sociology (SOCY)</option>
+            </select>
+          </div>
+          <div class="g2">
+            <div class="field">
+              <label>Year</label>
+              <select id="bYear">
+                <option value="Freshman">Freshman</option>
+                <option value="Sophomore" selected>Sophomore</option>
+                <option value="Junior">Junior</option>
+                <option value="Senior">Senior</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Credits completed</label>
+              <input type="number" id="bCrDone" value="32" min="0" max="120"/>
+            </div>
+          </div>
+          <div class="g2">
+            <div class="field">
+              <label>Credits this semester</label>
+              <input type="number" id="bCrWant" value="15" min="9" max="21"/>
+            </div>
+            <div class="field">
+              <label>Target GPA</label>
+              <input type="number" id="bGPA" value="3.3" min="2.0" max="4.0" step="0.1"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Schedule preferences</div>
+          <div class="field">
+            <label>Preferred days</label>
+            <div class="toggle-group">
+              <button class="tog-btn on-blue" data-val="M" onclick="toggleBtn(this,'on-blue')">Mon</button>
+              <button class="tog-btn on-blue" data-val="Tu" onclick="toggleBtn(this,'on-blue')">Tue</button>
+              <button class="tog-btn on-blue" data-val="W" onclick="toggleBtn(this,'on-blue')">Wed</button>
+              <button class="tog-btn on-blue" data-val="Th" onclick="toggleBtn(this,'on-blue')">Thu</button>
+              <button class="tog-btn on-blue" data-val="F" onclick="toggleBtn(this,'on-blue')">Fri</button>
+            </div>
+          </div>
+          <div class="field">
+            <label>Preferred times</label>
+            <div class="toggle-group">
+              <button class="tog-btn" data-val="early" onclick="toggleBtn(this,'on')">Early (7–9am)</button>
+              <button class="tog-btn on" data-val="morning" onclick="toggleBtn(this,'on')">Morning (9–12)</button>
+              <button class="tog-btn on" data-val="midday" onclick="toggleBtn(this,'on')">Midday (12–2)</button>
+              <button class="tog-btn on" data-val="afternoon" onclick="toggleBtn(this,'on')">Afternoon (2–5)</button>
+              <button class="tog-btn" data-val="evening" onclick="toggleBtn(this,'on')">Evening (5–9pm)</button>
+              <button class="tog-btn on" data-val="online" onclick="toggleBtn(this,'on')">Online/async</button>
+            </div>
+          </div>
+          <div class="field">
+            <label>Workload preference</label>
+            <select id="bWorkload">
+              <option value="light">Light — prioritize easy graders</option>
+              <option value="balanced" selected>Balanced — mix of challenge and GPA</option>
+              <option value="challenging">Challenging — push my limits</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Gen-ed requirements</label>
+            <select id="bGened">
+              <option value="none">No gen-eds needed right now</option>
+              <option value="some" selected>Mix in 1–2 gen-ed courses</option>
+              <option value="heavy">Heavy gen-ed semester</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Course constraints</div>
+          <div class="field">
+            <label>Must include</label>
+            <input type="text" id="bMustIn" placeholder="e.g. CMSC351, MATH241"/>
+          </div>
+          <div class="field">
+            <label>Avoid</label>
+            <input type="text" id="bAvoid" placeholder="e.g. CMSC216, early morning labs"/>
+          </div>
+          <div class="field">
+            <label>Additional notes</label>
+            <textarea id="bNotes" placeholder="Part-time job, commuter, prefer back-to-back classes..." style="height:64px;"></textarea>
+          </div>
+        </div>
+
+        <button class="btn-red" id="genBtn" onclick="buildSchedule()">
+          ✦ Build my schedule
+        </button>
+
+      </div>
+
+      <!-- ── RIGHT: Result ───────────────────────────── -->
+      <div id="resultPanel">
+        <div class="empty-state" id="emptyState">
+          <div class="empty-state-icon">🗓</div>
+          <p>Fill in your preferences on the left and click <strong>Build my schedule</strong> to generate your personalized UMD semester plan.</p>
+        </div>
+        <div id="schedResult" style="display:none;"></div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand"><span class="logo-badge">UMD</span><span class="logo-text">TerpAdvisor</span></div>
+    <p class="footer-note">Data from <a href="https://umd.io" target="_blank">umd.io</a> and <a href="https://planetterp.com" target="_blank">PlanetTerp</a>. Not affiliated with UMD.</p>
+  </div>
+</footer>
+
+<script src="../js/api.js"></script>
+<script src="../js/nav.js"></script>
+<script>
+function toggleBtn(btn, cls) { btn.classList.toggle(cls); }
+
+function getPrefs() {
+  const days = [...document.querySelectorAll('.tog-btn.on-blue')].map(b => b.dataset.val);
+  const times = [...document.querySelectorAll('.tog-btn.on')].map(b => b.dataset.val);
+  const sel = id => document.getElementById(id);
+  const majorOpts = sel('bMajor');
+  return {
+    major: sel('bMajor').value,
+    majorName: majorOpts.options[majorOpts.selectedIndex].text,
+    year: sel('bYear').value,
+    crDone: parseInt(sel('bCrDone').value) || 32,
+    crWant: parseInt(sel('bCrWant').value) || 15,
+    gpa: parseFloat(sel('bGPA').value) || 3.3,
+    workload: sel('bWorkload').value,
+    gened: sel('bGened').value,
+    mustIn: (sel('bMustIn').value || '').trim(),
+    avoid: (sel('bAvoid').value || '').trim(),
+    notes: (sel('bNotes').value || '').trim(),
+    days, times,
+  };
+}
+
+async function buildSchedule() {
+  const btn = document.getElementById('genBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Fetching UMD course data...';
+  document.getElementById('emptyState').style.display = 'none';
+  const res = document.getElementById('schedResult');
+  res.style.display = 'block';
+  res.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔄</div><p>Pulling courses from umd.io and building your schedule with AI…</p></div>`;
+
+  const p = getPrefs();
+  let courses = [];
+
+  try {
+    const depts = [p.major];
+    if (p.gened === 'some') depts.push('ENGL', 'HIST');
+    if (p.gened === 'heavy') depts.push('ENGL', 'HIST', 'PSYC', 'SOCY', 'KNES');
+
+    for (const dept of depts) {
+      try {
+        const arr = await umdCourses(dept, 15);
+        courses.push(...arr);
+      } catch(e) {}
+    }
+
+    if (p.mustIn) {
+      const codes = p.mustIn.split(',').map(s => s.trim()).filter(Boolean);
+      for (const code of codes) {
+        try { const c = await umdCourseById(code); if (c) courses.push({ ...c, _forced: true }); } catch(e) {}
+      }
+    }
+  } catch(e) {}
+
+  btn.textContent = '⏳ AI is crafting your schedule...';
+
+  const courseList = courses.slice(0, 40)
+    .map(c => `${c.course_id}: ${c.name} (${c.credits || 3}cr)${(c.gen_ed || []).length ? ' [GenEd:' + c.gen_ed.join(',') + ']' : ''}${(c.relationships?.prereqs || []).length ? ' [Prereq]' : ''}`)
+    .join('\n');
+
+  const prompt = `You are building a UMD semester schedule. Student profile:
+- Major: ${p.majorName} (${p.major})
+- Year: ${p.year}, Credits completed: ${p.crDone}
+- Wants: ~${p.crWant} credits, ${Math.round(p.crWant / 3)} courses
+- Target GPA: ${p.gpa}
+- Workload: ${p.workload}
+- Gen-eds needed: ${p.gened}
+- Preferred days: ${p.days.join(', ') || 'any'}
+- Preferred times: ${p.times.join(', ') || 'any'}
+- Must include: ${p.mustIn || 'none'}
+- Avoid: ${p.avoid || 'none'}
+- Notes: ${p.notes || 'none'}
+
+Available UMD courses from umd.io:
+${courseList}
+
+Select ~${Math.round(p.crWant / 3)} courses totaling ~${p.crWant} credits. Assign realistic UMD section times. Respond ONLY with this exact JSON structure, no markdown:
+{
+  "semester": "Fall 2026",
+  "totalCredits": 15,
+  "gpaProjection": 3.3,
+  "rationale": "2-sentence explanation of this schedule",
+  "courses": [
+    {
+      "code": "CMSC351",
+      "name": "Algorithms",
+      "credits": 3,
+      "days": "TuTh",
+      "time": "11:00am–12:15pm",
+      "location": "CSI 2117",
+      "professor": "Suggested professor name",
+      "avgGPA": 2.9,
+      "genEd": "",
+      "reason": "Why this course fits the student",
+      "difficulty": "hard"
+    }
+  ]
+}`;
+
+  let sched;
+  try {
+    sched = await claudeJSON(prompt, 2000);
+  } catch(e) {
+    res.innerHTML = `<div class="empty-state"><div class="empty-state-icon">⚠️</div><p>Something went wrong building your schedule. Please try again.</p></div>`;
+    btn.disabled = false;
+    btn.textContent = '✦ Build my schedule';
+    return;
+  }
+
+  // Enrich with PlanetTerp
+  btn.textContent = '⏳ Enriching with PlanetTerp data...';
+  const ptData = {};
+  for (const c of (sched.courses || [])) {
+    const pt = await ptCourse(c.code);
+    if (pt?.average_gpa) ptData[c.code] = { gpa: parseFloat(pt.average_gpa).toFixed(2), profs: pt.professors?.slice(0, 3) || [] };
+  }
+
+  renderSchedule(sched, ptData, p);
+  btn.disabled = false;
+  btn.textContent = '✦ Rebuild schedule';
+}
+
+function renderSchedule(sched, ptData, prefs) {
+  const courses = sched.courses || [];
+  const totalCr = courses.reduce((s, c) => s + (c.credits || 3), 0);
+  const ptGPAs = Object.values(ptData).map(v => parseFloat(v.gpa)).filter(Boolean);
+  const avgGPA = ptGPAs.length ? (ptGPAs.reduce((a, b) => a + b, 0) / ptGPAs.length).toFixed(2) : (sched.gpaProjection || '—');
+  const diffMap = { easy: 'pill-green', moderate: 'pill-amber', hard: 'pill-red', balanced: 'pill-blue' };
+
+  let html = `
+    <div class="g4" style="margin-bottom:20px;">
+      <div class="stat-card"><div class="lbl">Semester</div><div class="val" style="font-size:16px;">${sched.semester || 'Fall 2026'}</div></div>
+      <div class="stat-card"><div class="lbl">Total credits</div><div class="val">${totalCr}</div></div>
+      <div class="stat-card"><div class="lbl">Avg GPA (PlanetTerp)</div><div class="val">${avgGPA}</div></div>
+      <div class="stat-card"><div class="lbl">Courses</div><div class="val">${courses.length}</div></div>
+    </div>`;
+
+  if (sched.rationale) {
+    html += `<div style="background:#F5F4F0;border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#5A5852;border-left:3px solid #E21833;">💡 ${sched.rationale}</div>`;
+  }
+
+  html += `<div class="week-cal-wrap">${renderWeekCalSVG(courses)}</div>`;
+
+  html += `<div style="margin-top:20px;">`;
+  for (const c of courses) {
+    const pt = ptData[c.code];
+    const gpaShow = pt?.gpa || (c.avgGPA ? c.avgGPA.toFixed(1) : null);
+    const diff = c.difficulty || 'moderate';
+    html += `
+      <div class="sem-result-card">
+        <div class="src-header">
+          <div>
+            <div class="src-code">${c.code} &nbsp;<span style="font-weight:400;font-size:11px;color:#9B9890;">${c.credits || 3} credits</span></div>
+            <div class="src-name">${c.name}</div>
+          </div>
+          <span class="pill ${diffMap[diff] || 'pill-amber'}">${diff}</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin:8px 0;">
+          ${c.days ? `<span class="pill pill-amber">⏰ ${c.days} ${c.time || ''}</span>` : ''}
+          ${c.location ? `<span class="pill pill-gray">📍 ${c.location}</span>` : ''}
+          ${c.professor ? `<span class="pill pill-gray">👤 ${c.professor}</span>` : ''}
+          ${gpaShow ? `<span class="pill pill-green">📊 Avg GPA: ${gpaShow}</span>` : ''}
+          ${c.genEd ? `<span class="pill pill-blue">${c.genEd}</span>` : ''}
+        </div>
+        ${c.reason ? `<div class="src-reason">${c.reason}</div>` : ''}
+        ${pt?.profs?.length ? `<div style="font-size:11px;color:#9B9890;margin-top:6px;">Recent professors: ${pt.profs.join(', ')}</div>` : ''}
+      </div>`;
+  }
+  html += `</div>`;
+
+  html += `
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;">
+      <a href="advisor.html" class="btn-ghost" style="font-size:13px;padding:10px 18px;">Ask advisor about this schedule →</a>
+      <button onclick="document.getElementById('genBtn').click()" class="btn-ghost" style="font-size:13px;padding:10px 18px;">Rebuild</button>
+    </div>`;
+
+  document.getElementById('schedResult').innerHTML = html;
+}
+</script>
+
+</body>
+</html>

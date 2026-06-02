@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>AI Advisor — TerpAdvisor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/style.css"/>
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="nav-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-badge">UMD</span><span class="logo-text">TerpAdvisor</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html" class="nav-link">Home</a></li>
+      <li><a href="builder.html" class="nav-link">Schedule Builder</a></li>
+      <li><a href="courses.html" class="nav-link">Course Search</a></li>
+      <li><a href="advisor.html" class="nav-link active">AI Advisor</a></li>
+      <li><a href="audit.html" class="nav-link">Degree Audit</a></li>
+    </ul>
+    <a href="builder.html" class="cta-btn">Build My Schedule</a>
+    <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="../index.html">Home</a>
+    <a href="builder.html">Schedule Builder</a>
+    <a href="courses.html">Course Search</a>
+    <a href="advisor.html">AI Advisor</a>
+    <a href="audit.html">Degree Audit</a>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <p class="section-eyebrow">AI Advisor</p>
+    <h1>Your personal <em>Terp advisor</em></h1>
+    <p>Ask anything about UMD courses, professors, gen-eds, prerequisites, or graduation planning. Powered by Claude AI with deep UMD knowledge.</p>
+  </div>
+</section>
+
+<main class="page-body">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:260px 1fr;gap:28px;align-items:start;">
+
+      <!-- Sidebar: profile + quick prompts -->
+      <div>
+        <div class="card">
+          <div class="card-title">Your profile</div>
+          <div class="field">
+            <label>Major</label>
+            <select id="pMajor">
+              <option value="">Not specified</option>
+              <option value="Computer Science">Computer Science</option>
+              <option value="Mathematics">Mathematics</option>
+              <option value="Biology">Biology</option>
+              <option value="Chemistry">Chemistry</option>
+              <option value="Physics">Physics</option>
+              <option value="Business">Business (BMGT)</option>
+              <option value="Mechanical Engineering">Mechanical Engineering</option>
+              <option value="Electrical Engineering">Electrical Engineering</option>
+              <option value="Psychology">Psychology</option>
+              <option value="Economics">Economics</option>
+              <option value="English">English</option>
+              <option value="History">History</option>
+              <option value="Government & Politics">Government &amp; Politics</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Year</label>
+            <select id="pYear">
+              <option value="">Not specified</option>
+              <option>Freshman</option>
+              <option>Sophomore</option>
+              <option>Junior</option>
+              <option>Senior</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Credits completed</label>
+            <input type="number" id="pCr" placeholder="e.g. 45" min="0" max="150"/>
+          </div>
+          <div class="field">
+            <label>GPA</label>
+            <input type="number" id="pGPA" placeholder="e.g. 3.4" min="0" max="4" step="0.1"/>
+          </div>
+          <div class="field">
+            <label>Goals / interests</label>
+            <input type="text" id="pGoals" placeholder="e.g. machine learning, pre-med"/>
+          </div>
+          <button class="btn-red" onclick="applyProfile()" style="font-size:13px;padding:9px;">Save profile</button>
+          <div id="profileSaved" style="display:none;font-size:12px;color:#3B6D11;text-align:center;margin-top:8px;">✓ Profile saved</div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Quick questions</div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <button class="chip" style="text-align:left;border-radius:8px;" onclick="sendQuick('What courses should I take next semester given my major and year?')">Next semester picks →</button>
+            <button class="chip" style="text-align:left;border-radius:8px;" onclick="sendQuick('What are the easiest gen-ed courses at UMD that are also interesting?')">Best gen-eds →</button>
+            <button class="chip" style="text-align:left;border-radius:8px;" onclick="sendQuick('What are the most important prerequisites I should complete ASAP?')">Key prerequisites →</button>
+            <button class="chip" style="text-align:left;border-radius:8px;" onclick="sendQuick('Am I on track to graduate on time?')">Graduation check →</button>
+            <button class="chip" style="text-align:left;border-radius:8px;" onclick="sendQuick('What professors should I look for when registering on Testudo?')">Professor tips →</button>
+            <button class="chip" style="text-align:left;border-radius:8px;" onclick="sendQuick('What double majors or minors pair well with my major?')">Minors & doubles →</button>
+            <button class="chip" style="text-align:left;border-radius:8px;" onclick="sendQuick('How do I balance a heavy workload semester at UMD?')">Workload balance →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat area -->
+      <div>
+        <div class="chat-wrap" id="chatArea">
+          <div class="msg assistant">
+            <span class="msg-lbl">Terp Advisor</span>
+            <div class="bubble">Fear the Turtle! 🐢 I'm your UMD academic advisor. I know UMD's curriculum, CORE gen-ed requirements, Testudo, and PlanetTerp data. Fill in your profile on the left for personalized advice, or just ask me anything!</div>
+          </div>
+        </div>
+        <div class="chat-input-row">
+          <textarea id="chatInput" placeholder="Ask about courses, professors, gen-eds, graduation planning…" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg();}"></textarea>
+          <button class="chat-send-btn" id="sendBtn" onclick="sendMsg()">Send →</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand"><span class="logo-badge">UMD</span><span class="logo-text">TerpAdvisor</span></div>
+    <p class="footer-note">Data from <a href="https://umd.io" target="_blank">umd.io</a> and <a href="https://planetterp.com" target="_blank">PlanetTerp</a>. Not affiliated with UMD.</p>
+  </div>
+</footer>
+
+<script src="../js/api.js"></script>
+<script src="../js/nav.js"></script>
+<script>
+let chatHistory = [];
+let profile = {};
+
+function getSystemPrompt() {
+  const p = profile;
+  const prof = p.major ? `Student profile: Major: ${p.major}, Year: ${p.year || 'unknown'}, Credits: ${p.cr || '?'}, GPA: ${p.gpa || '?'}, Goals: ${p.goals || 'not specified'}.` : '';
+  return `You are a knowledgeable, friendly UMD (University of Maryland, College Park) academic advisor.
+${prof}
+
+Key UMD facts you know:
+- Registration is through Testudo (testudo.umd.edu)
+- Course data from umd.io; professor reviews and grade distributions from PlanetTerp (planetterp.com)
+- CORE gen-ed system: FSAW (writing), FSMA (math), FSOC (oral comm), FSPW (pro writing), DSHU (humanities), DSNS/DSNL (natural science), DSSP (social science), DVUP/DVCC (diversity), SCIS (science/tech)
+- CS major (CMSC): requires CMSC131, 132, 216, 250, 330, 351, plus math sequence MATH140/141/240/241
+- Most UMD degrees require 120 credits total
+- Semesters: Fall (August) and Spring (January)
+- Always recommend checking PlanetTerp for professor reviews before registering
+
+Be specific, helpful, and concise. Use bullet points for lists. Under 250 words unless a detailed plan is requested. Occasionally say "Fear the Turtle!" to feel authentic.`;
+}
+
+function applyProfile() {
+  profile = {
+    major: document.getElementById('pMajor').value,
+    year: document.getElementById('pYear').value,
+    cr: document.getElementById('pCr').value,
+    gpa: document.getElementById('pGPA').value,
+    goals: document.getElementById('pGoals').value,
+  };
+  const el = document.getElementById('profileSaved');
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 2500);
+}
+
+function appendMsg(role, text) {
+  const area = document.getElementById('chatArea');
+  const d = document.createElement('div');
+  d.className = 'msg ' + role;
+  d.innerHTML = `<span class="msg-lbl">${role === 'user' ? 'You' : 'Terp Advisor'}</span><div class="bubble"></div>`;
+  d.querySelector('.bubble').textContent = text;
+  area.appendChild(d);
+  area.scrollTop = area.scrollHeight;
+}
+
+function showTyping() {
+  const area = document.getElementById('chatArea');
+  const d = document.createElement('div');
+  d.className = 'msg assistant'; d.id = 'typing-ind';
+  d.innerHTML = '<span class="msg-lbl">Terp Advisor</span><div class="bubble" style="padding:10px 14px;"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>';
+  area.appendChild(d);
+  area.scrollTop = area.scrollHeight;
+}
+
+async function sendMsg() {
+  const inp = document.getElementById('chatInput');
+  const text = inp.value.trim();
+  if (!text) return;
+  document.getElementById('sendBtn').disabled = true;
+  inp.value = '';
+  appendMsg('user', text);
+  chatHistory.push({ role: 'user', content: text });
+  showTyping();
+  try {
+    const reply = await claudeChat(chatHistory, getSystemPrompt());
+    document.getElementById('typing-ind')?.remove();
+    appendMsg('assistant', reply);
+    chatHistory.push({ role: 'assistant', content: reply });
+  } catch {
+    document.getElementById('typing-ind')?.remove();
+    appendMsg('assistant', 'Something went wrong. Please try again.');
+  }
+  document.getElementById('sendBtn').disabled = false;
+}
+
+function sendQuick(text) {
+  document.getElementById('chatInput').value = text;
+  sendMsg();
+}
+
+// Handle ?q= param from course search links
+window.addEventListener('DOMContentLoaded', () => {
+  const q = new URLSearchParams(location.search).get('q');
+  if (q) sendQuick(q);
+});
+</script>
+</body>
+</html>

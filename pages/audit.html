@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Degree Audit — TerpAdvisor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/style.css"/>
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="nav-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-badge">UMD</span><span class="logo-text">TerpAdvisor</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html" class="nav-link">Home</a></li>
+      <li><a href="builder.html" class="nav-link">Schedule Builder</a></li>
+      <li><a href="courses.html" class="nav-link">Course Search</a></li>
+      <li><a href="advisor.html" class="nav-link">AI Advisor</a></li>
+      <li><a href="audit.html" class="nav-link active">Degree Audit</a></li>
+    </ul>
+    <a href="builder.html" class="cta-btn">Build My Schedule</a>
+    <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="../index.html">Home</a>
+    <a href="builder.html">Schedule Builder</a>
+    <a href="courses.html">Course Search</a>
+    <a href="advisor.html">AI Advisor</a>
+    <a href="audit.html">Degree Audit</a>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <p class="section-eyebrow">Degree Audit</p>
+    <h1>Track your path to <em>graduation</em></h1>
+    <p>Enter your completed courses and credits to see your CORE gen-ed and major requirement progress — and get AI recommendations for what to take next.</p>
+  </div>
+</section>
+
+<main class="page-body">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:320px 1fr;gap:28px;align-items:start;">
+
+      <!-- Left: Inputs -->
+      <div>
+        <div class="card">
+          <div class="card-title">Your info</div>
+          <div class="field">
+            <label>Major</label>
+            <select id="aMajor" onchange="refreshAudit()">
+              <option value="CMSC">Computer Science</option>
+              <option value="MATH">Mathematics</option>
+              <option value="BIOL">Biology</option>
+              <option value="CHEM">Chemistry</option>
+              <option value="PHYS">Physics</option>
+              <option value="BMGT">Business (BMGT)</option>
+              <option value="ENME">Mechanical Engineering</option>
+              <option value="ENEE">Electrical Engineering</option>
+              <option value="PSYC">Psychology</option>
+              <option value="ECON">Economics</option>
+              <option value="ENGL">English</option>
+              <option value="HIST">History</option>
+              <option value="GVPT">Government &amp; Politics</option>
+              <option value="KNES">Kinesiology</option>
+              <option value="SOCY">Sociology</option>
+            </select>
+          </div>
+          <div class="g2">
+            <div class="field">
+              <label>Year</label>
+              <select id="aYear" onchange="refreshAudit()">
+                <option>Freshman</option>
+                <option selected>Sophomore</option>
+                <option>Junior</option>
+                <option>Senior</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Credits earned</label>
+              <input type="number" id="aCr" value="32" min="0" max="150" onchange="refreshAudit()"/>
+            </div>
+          </div>
+          <div class="field">
+            <label>GPA</label>
+            <input type="number" id="aGPA" value="3.2" min="0" max="4" step="0.1" onchange="refreshAudit()"/>
+          </div>
+          <div class="field">
+            <label>Completed courses (comma-separated)</label>
+            <textarea id="aDone" placeholder="e.g. CMSC131, CMSC132, MATH140, ENGL101, HIST200" style="height:90px;" oninput="refreshAudit()"></textarea>
+          </div>
+          <div class="field">
+            <label>In-progress courses</label>
+            <input type="text" id="aInProg" placeholder="e.g. CMSC216, MATH241" onchange="refreshAudit()"/>
+          </div>
+          <button class="btn-red" onclick="refreshAudit()" style="font-size:13px;padding:9px;">Refresh audit</button>
+        </div>
+
+        <div class="card">
+          <div class="card-title">AI analysis</div>
+          <p style="font-size:13px;color:#5A5852;margin-bottom:12px;">Get personalized recommendations based on your audit.</p>
+          <button class="btn-red" id="analyzeBtn" onclick="analyzeAudit()" style="font-size:13px;padding:9px;">Analyze my progress ↗</button>
+          <div id="aiAnalysis" style="margin-top:14px;font-size:13px;color:#2A2926;line-height:1.65;display:none;"></div>
+        </div>
+      </div>
+
+      <!-- Right: Audit output -->
+      <div id="auditOutput"></div>
+
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand"><span class="logo-badge">UMD</span><span class="logo-text">TerpAdvisor</span></div>
+    <p class="footer-note">Data from <a href="https://umd.io" target="_blank">umd.io</a> and <a href="https://planetterp.com" target="_blank">PlanetTerp</a>. Not affiliated with UMD.</p>
+  </div>
+</footer>
+
+<script src="../js/api.js"></script>
+<script src="../js/nav.js"></script>
+<script>
+const CORE_REQS = [
+  { id: 'FSAW', name: 'FSAW — First-year writing', credits: 3, keys: ['engl101','engl10'] },
+  { id: 'FSMA', name: 'FSMA — Math requirement', credits: 3, keys: ['math140','math113','stat100','math115'] },
+  { id: 'FSOC', name: 'FSOC — Oral communication', credits: 3, keys: ['comm107','comm108'] },
+  { id: 'FSPW', name: 'FSPW — Professional writing', credits: 3, keys: ['engl393','engl394','bmgt'] },
+  { id: 'DSHU', name: 'DSHU — Humanities', credits: 6, keys: ['arth','musc','phil','engl2','hist','ling','clas','jwst','aosc'] },
+  { id: 'DSNS', name: 'DSNS — Natural science', credits: 4, keys: ['chem','biol','phys','geol','atoc'] },
+  { id: 'DSNL', name: 'DSNL — Natural science w/ lab', credits: 4, keys: ['chem1','biol1','phys1'] },
+  { id: 'DSSP', name: 'DSSP — Social science', credits: 6, keys: ['psyc','socy','gvpt','econ','anth','geog'] },
+  { id: 'DVUP', name: 'DVUP — Understanding plural societies', credits: 3, keys: ['aasp','wmst','lasp','aast'] },
+  { id: 'DVCC', name: 'DVCC — Cultural competency', credits: 3, keys: ['arab','chin','fren','germ','span','jpn','kore'] },
+  { id: 'SCIS', name: 'SCIS — Science, tech & society', credits: 3, keys: ['infm','ence','enme','enee','inst'] },
+];
+
+const MAJOR_REQS = {
+  CMSC: [
+    { name: 'CMSC131 — Intro to OOP', keys: ['cmsc131'] },
+    { name: 'CMSC132 — OOP II', keys: ['cmsc132'] },
+    { name: 'CMSC216 — Intro to Systems', keys: ['cmsc216'] },
+    { name: 'CMSC250 — Discrete Structures', keys: ['cmsc250'] },
+    { name: 'CMSC330 — Prog. Languages', keys: ['cmsc330'] },
+    { name: 'CMSC351 — Algorithms', keys: ['cmsc351'] },
+    { name: 'MATH140 — Calculus I', keys: ['math140'] },
+    { name: 'MATH141 — Calculus II', keys: ['math141'] },
+    { name: 'STAT400 — Applied Probability', keys: ['stat400','stat401'] },
+    { name: 'CMSC411/412/420/430/433 (upper div)', keys: ['cmsc4'] },
+  ],
+  MATH: [
+    { name: 'MATH140 — Calculus I', keys: ['math140'] },
+    { name: 'MATH141 — Calculus II', keys: ['math141'] },
+    { name: 'MATH240 — Linear Algebra', keys: ['math240'] },
+    { name: 'MATH241 — Calculus III', keys: ['math241'] },
+    { name: 'MATH246 — Differential Equations', keys: ['math246'] },
+    { name: 'MATH310 — Intro to Proofs', keys: ['math310'] },
+    { name: 'MATH401 — Advanced Calculus', keys: ['math401'] },
+    { name: 'MATH403 — Abstract Algebra', keys: ['math403'] },
+  ],
+  BIOL: [
+    { name: 'BIOL101 — Intro to Biology I', keys: ['biol101'] },
+    { name: 'BIOL106 — Intro to Biology II', keys: ['biol106'] },
+    { name: 'CHEM131 — Chemistry I', keys: ['chem131'] },
+    { name: 'CHEM132 — Chemistry II', keys: ['chem132'] },
+    { name: 'MATH140 — Calculus I', keys: ['math140'] },
+    { name: 'BIOL301 — Genetics', keys: ['biol301'] },
+    { name: 'BIOL311 — Cell Biology & Biochem', keys: ['biol311'] },
+  ],
+  default: [
+    { name: 'Core introductory course', keys: [] },
+    { name: 'Core intermediate course', keys: [] },
+    { name: 'Upper division requirements', keys: [] },
+  ]
+};
+
+function getDone() { return (document.getElementById('aDone').value || '').toLowerCase(); }
+function getInProg() { return (document.getElementById('aInProg').value || '').toLowerCase(); }
+
+function checkReq(req, done, inProg) {
+  if (!req.keys.length) return 'miss';
+  const found = req.keys.some(k => done.includes(k));
+  if (found) return 'done';
+  const prog = req.keys.some(k => inProg.includes(k));
+  if (prog) return 'prog';
+  return 'miss';
+}
+
+function refreshAudit() {
+  const major = document.getElementById('aMajor').value;
+  const year = document.getElementById('aYear').value;
+  const cr = parseInt(document.getElementById('aCr').value) || 0;
+  const gpa = parseFloat(document.getElementById('aGPA').value) || 0;
+  const done = getDone();
+  const inProg = getInProg();
+  const needed = 120;
+  const pct = Math.min(100, Math.round(cr / needed * 100));
+  const gradMap = { Freshman: '2028–29', Sophomore: '2027–28', Junior: '2026–27', Senior: '2025–26' };
+
+  let coreMetCount = 0;
+  const coreRows = CORE_REQS.map(r => {
+    const status = checkReq(r, done, inProg);
+    if (status === 'done') coreMetCount++;
+    return { ...r, status };
+  });
+
+  const majorReqs = MAJOR_REQS[major] || MAJOR_REQS.default;
+  let majMetCount = 0;
+  const majorRows = majorReqs.map(r => {
+    const status = checkReq(r, done, inProg);
+    if (status === 'done') majMetCount++;
+    return { ...r, status };
+  });
+
+  const totalMet = coreMetCount + majMetCount;
+  const totalReqs = CORE_REQS.length + majorReqs.length;
+
+  function reqRows(rows) {
+    return rows.map(r => `
+      <div class="req-row">
+        <div class="req-dot ${r.status}"></div>
+        <div class="req-label">${r.name}</div>
+        <div class="req-status">${r.status === 'done' ? '✓ Done' : r.status === 'prog' ? '⏳ In progress' : '—'}</div>
+      </div>`).join('');
+  }
+
+  document.getElementById('auditOutput').innerHTML = `
+    <div class="g4" style="margin-bottom:20px;">
+      <div class="stat-card"><div class="lbl">Credits earned</div><div class="val">${cr}</div></div>
+      <div class="stat-card"><div class="lbl">Credits remaining</div><div class="val">${Math.max(0, needed - cr)}</div></div>
+      <div class="stat-card"><div class="lbl">Requirements met</div><div class="val">${totalMet}/${totalReqs}</div></div>
+      <div class="stat-card"><div class="lbl">Est. graduation</div><div class="val" style="font-size:16px;">${gradMap[year] || '—'}</div></div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <span style="font-size:14px;font-weight:600;">Overall progress to degree</span>
+        <span style="font-size:13px;color:#9B9890;">${pct}% · ${cr}/${needed} credits</span>
+      </div>
+      <div class="progress-wrap"><div class="progress-fill" style="width:${pct}%;"></div></div>
+      ${gpa ? `<div style="font-size:12px;color:#5A5852;margin-top:6px;">Current GPA: <strong>${gpa.toFixed(2)}</strong></div>` : ''}
+    </div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title">CORE gen-ed requirements (${coreMetCount}/${CORE_REQS.length} complete)</div>
+      <div class="progress-wrap"><div class="progress-fill" style="width:${Math.round(coreMetCount/CORE_REQS.length*100)}%;"></div></div>
+      <div style="margin-top:12px;">${reqRows(coreRows)}</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Major requirements — ${document.getElementById('aMajor').options[document.getElementById('aMajor').selectedIndex].text} (${majMetCount}/${majorRows.length} complete)</div>
+      <div class="progress-wrap"><div class="progress-fill" style="width:${Math.round(majMetCount/majorRows.length*100)}%;"></div></div>
+      <div style="margin-top:12px;">${reqRows(majorRows)}</div>
+    </div>
+
+    <div style="margin-top:8px;">
+      <a href="advisor.html?q=${encodeURIComponent('Review my degree audit: I am a ' + year + ' ' + document.getElementById('aMajor').options[document.getElementById('aMajor').selectedIndex].text + ' with ' + cr + ' credits and GPA ' + gpa + '. I have completed: ' + done + '. What should I focus on next semester?')}" class="btn-ghost" style="font-size:13px;padding:10px 18px;">Ask advisor to review my audit →</a>
+    </div>`;
+}
+
+async function analyzeAudit() {
+  const btn = document.getElementById('analyzeBtn');
+  btn.disabled = true; btn.textContent = '⏳ Analyzing…';
+  const aiDiv = document.getElementById('aiAnalysis');
+  aiDiv.style.display = 'block';
+  aiDiv.textContent = 'Generating AI analysis…';
+
+  const major = document.getElementById('aMajor').options[document.getElementById('aMajor').selectedIndex].text;
+  const year = document.getElementById('aYear').value;
+  const cr = document.getElementById('aCr').value;
+  const gpa = document.getElementById('aGPA').value;
+  const done = getDone();
+  const inProg = getInProg();
+
+  const prompt = `You are a UMD academic advisor. A student has the following profile:
+- Major: ${major}, Year: ${year}
+- Credits earned: ${cr}/120, GPA: ${gpa}
+- Completed courses: ${done || 'none listed'}
+- In progress: ${inProg || 'none'}
+
+Based on their UMD CORE gen-ed requirements and major requirements, give them:
+1. A brief status summary (1-2 sentences)
+2. Top 3 most urgent courses/requirements to tackle next semester
+3. One piece of strategic advice for their graduation timeline
+
+Be concise and specific to UMD. Under 200 words.`;
+
+  try {
+    const reply = await claudeChat([{ role: 'user', content: prompt }],
+      'You are a UMD academic advisor. Give concise, specific, actionable advice. Fear the Turtle!');
+    aiDiv.textContent = reply;
+  } catch {
+    aiDiv.textContent = 'Could not generate analysis. Please try again.';
+  }
+  btn.disabled = false; btn.textContent = 'Analyze my progress ↗';
+}
+
+refreshAudit();
+</script>
+</body>
+</html>

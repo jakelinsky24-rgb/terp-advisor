@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Course Search — TerpAdvisor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/style.css"/>
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="nav-inner">
+    <a href="../index.html" class="logo">
+      <span class="logo-badge">UMD</span><span class="logo-text">TerpAdvisor</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html" class="nav-link">Home</a></li>
+      <li><a href="builder.html" class="nav-link">Schedule Builder</a></li>
+      <li><a href="courses.html" class="nav-link active">Course Search</a></li>
+      <li><a href="advisor.html" class="nav-link">AI Advisor</a></li>
+      <li><a href="audit.html" class="nav-link">Degree Audit</a></li>
+    </ul>
+    <a href="builder.html" class="cta-btn">Build My Schedule</a>
+    <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="../index.html">Home</a>
+    <a href="builder.html">Schedule Builder</a>
+    <a href="courses.html">Course Search</a>
+    <a href="advisor.html">AI Advisor</a>
+    <a href="audit.html">Degree Audit</a>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <p class="section-eyebrow">Course Search</p>
+    <h1>Find your next <em>UMD course</em></h1>
+    <p>Live course data from umd.io — search by code, topic, or department. See prereqs, gen-ed codes, and PlanetTerp GPA averages.</p>
+  </div>
+</section>
+
+<main class="page-body">
+  <div class="container">
+
+    <!-- Search bar -->
+    <div class="card" style="margin-bottom:20px;">
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;">
+        <div class="field" style="flex:2;min-width:200px;margin-bottom:0;">
+          <label>Course code or topic</label>
+          <input type="text" id="searchQ" placeholder="e.g. CMSC131, machine learning, organic chemistry" onkeydown="if(event.key==='Enter')doSearch()"/>
+        </div>
+        <div class="field" style="flex:1;min-width:160px;margin-bottom:0;">
+          <label>Department</label>
+          <select id="deptFilter">
+            <option value="">All departments</option>
+            <option value="CMSC">CMSC – Computer Science</option>
+            <option value="MATH">MATH – Mathematics</option>
+            <option value="ENGL">ENGL – English</option>
+            <option value="BMGT">BMGT – Business</option>
+            <option value="PHYS">PHYS – Physics</option>
+            <option value="CHEM">CHEM – Chemistry</option>
+            <option value="BIOL">BIOL – Biology</option>
+            <option value="PSYC">PSYC – Psychology</option>
+            <option value="HIST">HIST – History</option>
+            <option value="ECON">ECON – Economics</option>
+            <option value="ENEE">ENEE – Electrical Engineering</option>
+            <option value="ENME">ENME – Mechanical Engineering</option>
+            <option value="KNES">KNES – Kinesiology</option>
+            <option value="SOCY">SOCY – Sociology</option>
+            <option value="GVPT">GVPT – Government &amp; Politics</option>
+            <option value="LING">LING – Linguistics</option>
+            <option value="MUSC">MUSC – Music</option>
+            <option value="ARTH">ARTH – Art History</option>
+            <option value="PHIL">PHIL – Philosophy</option>
+            <option value="STAT">STAT – Statistics</option>
+          </select>
+        </div>
+        <div class="field" style="flex:1;min-width:130px;margin-bottom:0;">
+          <label>Credits</label>
+          <select id="crFilter">
+            <option value="">Any credits</option>
+            <option value="1">1 credit</option>
+            <option value="2">2 credits</option>
+            <option value="3">3 credits</option>
+            <option value="4">4 credits</option>
+          </select>
+        </div>
+        <div style="margin-bottom:0;">
+          <button class="btn-red" id="searchBtn" onclick="doSearch()" style="width:auto;padding:10px 22px;">Search</button>
+        </div>
+      </div>
+      <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:6px;">
+        <span style="font-size:12px;color:#9B9890;margin-right:4px;">Quick search:</span>
+        <button class="chip" onclick="quickSearch('CMSC131')">CMSC131</button>
+        <button class="chip" onclick="quickSearch('MATH140')">MATH140</button>
+        <button class="chip" onclick="quickSearch('ENGL101')">ENGL101</button>
+        <button class="chip" onclick="quickSearch('','CMSC')">All CMSC</button>
+        <button class="chip" onclick="quickSearch('','MATH')">All MATH</button>
+        <button class="chip" onclick="quickSearch('','BIOL')">All BIOL</button>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div id="resultsWrap">
+      <div class="empty-state">
+        <div class="empty-state-icon">🔍</div>
+        <p>Search for a course code, topic, or browse by department above.</p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand"><span class="logo-badge">UMD</span><span class="logo-text">TerpAdvisor</span></div>
+    <p class="footer-note">Data from <a href="https://umd.io" target="_blank">umd.io</a> and <a href="https://planetterp.com" target="_blank">PlanetTerp</a>. Not affiliated with UMD.</p>
+  </div>
+</footer>
+
+<script src="../js/api.js"></script>
+<script src="../js/nav.js"></script>
+<script>
+function quickSearch(q, dept) {
+  if (q) document.getElementById('searchQ').value = q;
+  if (dept) document.getElementById('deptFilter').value = dept;
+  doSearch();
+}
+
+async function doSearch() {
+  const q = document.getElementById('searchQ').value.trim();
+  const dept = document.getElementById('deptFilter').value;
+  const cr = document.getElementById('crFilter').value;
+  if (!q && !dept) { alert('Please enter a search term or select a department.'); return; }
+
+  const btn = document.getElementById('searchBtn');
+  btn.disabled = true; btn.textContent = '…';
+  const wrap = document.getElementById('resultsWrap');
+  wrap.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔄</div><p>Fetching courses from umd.io…</p></div>`;
+
+  let courses = [];
+  try {
+    const isCode = /^[A-Z]{2,4}\d/i.test(q);
+    if (isCode) {
+      const c = await umdCourseById(q);
+      if (c) courses = [c];
+    } else if (dept) {
+      courses = await umdCourses(dept, 20);
+      if (q) courses = courses.filter(c => c.name?.toLowerCase().includes(q.toLowerCase()));
+    } else {
+      // topic search across multiple depts
+      const searchDepts = ['CMSC','MATH','ENGL','BMGT','PHYS','CHEM','BIOL','PSYC','HIST','ECON','SOCY','GVPT','KNES','ENEE','STAT'];
+      for (const d of searchDepts) {
+        try {
+          const arr = await umdCourses(d, 20);
+          const hits = arr.filter(c => c.name?.toLowerCase().includes(q.toLowerCase()) || c.course_id?.toLowerCase().includes(q.toLowerCase()));
+          courses.push(...hits);
+          if (courses.length >= 12) break;
+        } catch(e) {}
+      }
+    }
+    if (cr) courses = courses.filter(c => String(c.credits) === cr);
+  } catch(e) {}
+
+  if (!courses.length) {
+    wrap.innerHTML = `<div class="empty-state"><div class="empty-state-icon">😕</div><p>No courses found. Try a different search or department filter.</p></div>`;
+    btn.disabled = false; btn.textContent = 'Search';
+    return;
+  }
+
+  wrap.innerHTML = `<p style="font-size:13px;color:#9B9890;margin-bottom:14px;">${courses.length} course${courses.length !== 1 ? 's' : ''} found</p>`;
+
+  for (const c of courses.slice(0, 12)) {
+    const pt = await ptCourse(c.code_id || c.course_id);
+    const gpa = pt?.average_gpa ? parseFloat(pt.average_gpa).toFixed(2) : null;
+    const profs = pt?.professors?.slice(0, 3).join(', ') || null;
+    const geneds = [...(c.gen_ed || []), ...(c.core || [])].join(', ');
+    const prereqs = c.relationships?.prereqs?.[0] || null;
+    const div = document.createElement('div');
+    div.className = 'course-card';
+    div.innerHTML = `
+      <div class="course-card-top">
+        <div>
+          <div class="course-code">${c.course_id} &nbsp;<span style="font-weight:400;font-size:11px;color:#9B9890;">${c.credits || '?'} credits · ${c.department || ''}</span></div>
+          <div class="course-name">${c.name}</div>
+        </div>
+        <div class="course-actions">
+          <a href="builder.html?must=${encodeURIComponent(c.course_id)}" class="action-btn">Add to plan</a>
+          <a href="advisor.html?q=${encodeURIComponent('Tell me about ' + c.course_id + ' ' + c.name)}" class="action-btn">Ask advisor</a>
+        </div>
+      </div>
+      <div class="course-desc">${(c.description || '').slice(0, 200)}${(c.description || '').length > 200 ? '…' : ''}</div>
+      <div class="course-meta">
+        ${gpa ? `<span class="pill pill-green">Avg GPA: ${gpa}</span>` : ''}
+        ${geneds ? `<span class="pill pill-blue">${geneds}</span>` : ''}
+        ${profs ? `<span class="pill pill-gray">Taught by: ${profs}</span>` : ''}
+      </div>
+      ${prereqs ? `<div class="prereq-note">⚠ Prereqs: ${prereqs.slice(0, 100)}${prereqs.length > 100 ? '…' : ''}</div>` : ''}`;
+    wrap.appendChild(div);
+  }
+
+  btn.disabled = false; btn.textContent = 'Search';
+}
+
+// Handle ?must= from builder links
+window.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(location.search);
+  const must = params.get('must');
+  if (must) { document.getElementById('searchQ').value = must; doSearch(); }
+});
+</script>
+
+</body>
+</html>

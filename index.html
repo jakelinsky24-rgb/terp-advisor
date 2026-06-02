@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TerpAdvisor — UMD Schedule Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ── NAV ─────────────────────────────────────────── -->
+  <header class="site-header">
+    <nav class="nav-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-badge">UMD</span>
+        <span class="logo-text">TerpAdvisor</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link active">Home</a></li>
+        <li><a href="pages/builder.html" class="nav-link">Schedule Builder</a></li>
+        <li><a href="pages/courses.html" class="nav-link">Course Search</a></li>
+        <li><a href="pages/advisor.html" class="nav-link">AI Advisor</a></li>
+        <li><a href="pages/audit.html" class="nav-link">Degree Audit</a></li>
+      </ul>
+      <a href="pages/builder.html" class="cta-btn">Build My Schedule</a>
+      <button class="hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html">Home</a>
+      <a href="pages/builder.html">Schedule Builder</a>
+      <a href="pages/courses.html">Course Search</a>
+      <a href="pages/advisor.html">AI Advisor</a>
+      <a href="pages/audit.html">Degree Audit</a>
+    </div>
+  </header>
+
+  <!-- ── HERO ─────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="hero-grid"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge">Powered by umd.io &amp; PlanetTerp</div>
+      <h1 class="hero-title">
+        Build your perfect<br />
+        <em>UMD semester.</em>
+      </h1>
+      <p class="hero-sub">Tell us your major, goals, and schedule preferences — we'll generate a personalized course plan using real UMD data, PlanetTerp ratings, and AI recommendations.</p>
+      <div class="hero-actions">
+        <a href="pages/builder.html" class="btn-primary">Build my schedule <span>→</span></a>
+        <a href="pages/courses.html" class="btn-ghost">Browse courses</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><span class="hstat-n">8,000+</span><span class="hstat-l">UMD courses</span></div>
+        <div class="hstat-div"></div>
+        <div class="hstat"><span class="hstat-n">Live</span><span class="hstat-l">PlanetTerp ratings</span></div>
+        <div class="hstat-div"></div>
+        <div class="hstat"><span class="hstat-n">AI</span><span class="hstat-l">Personalized picks</span></div>
+      </div>
+    </div>
+    <div class="hero-card-float">
+      <div class="float-card">
+        <div class="fc-header">
+          <span class="fc-sem">Fall 2026</span>
+          <span class="fc-cr">15 credits</span>
+        </div>
+        <div class="fc-course">
+          <span class="fc-code">CMSC351</span>
+          <span class="fc-name">Algorithms</span>
+          <span class="fc-time">TuTh 11–12:15pm</span>
+        </div>
+        <div class="fc-course">
+          <span class="fc-code">MATH241</span>
+          <span class="fc-name">Calculus III</span>
+          <span class="fc-time">MWF 10–10:50am</span>
+        </div>
+        <div class="fc-course">
+          <span class="fc-code">CMSC330</span>
+          <span class="fc-name">Organization of Prog. Languages</span>
+          <span class="fc-time">TuTh 2–3:15pm</span>
+        </div>
+        <div class="fc-course">
+          <span class="fc-code">HIST200</span>
+          <span class="fc-name">Intro to History [DSHU]</span>
+          <span class="fc-time">MWF 1–1:50pm</span>
+        </div>
+        <div class="fc-footer">
+          <span class="fc-gpa">Avg GPA: 3.2</span>
+          <span class="fc-tag">Balanced</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── HOW IT WORKS ──────────────────────────────────── -->
+  <section class="how-section">
+    <div class="container">
+      <p class="section-eyebrow">How it works</p>
+      <h2 class="section-title">Three steps to your ideal schedule</h2>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <h3>Tell us about you</h3>
+          <p>Enter your major, year, credits completed, target GPA, and time preferences. The more you tell us, the better the match.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <h3>We fetch real UMD data</h3>
+          <p>We pull live course listings from umd.io and cross-reference professor ratings and grade distributions from PlanetTerp.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <h3>AI builds your schedule</h3>
+          <p>Our AI advisor selects the best courses for your goals, explains each pick, and generates a visual weekly calendar.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FEATURES ──────────────────────────────────────── -->
+  <section class="features-section">
+    <div class="container">
+      <p class="section-eyebrow">Features</p>
+      <h2 class="section-title">Everything a Terp needs</h2>
+      <div class="features-grid">
+        <a href="pages/builder.html" class="feature-card feature-card--primary">
+          <div class="feat-icon">🗓</div>
+          <h3>Schedule Builder</h3>
+          <p>Input your major, credit goals, GPA target, time preferences, and must-take courses. Get a complete semester plan with a visual weekly calendar.</p>
+          <span class="feat-link">Build schedule →</span>
+        </a>
+        <a href="pages/courses.html" class="feature-card">
+          <div class="feat-icon">🔍</div>
+          <h3>Course Search</h3>
+          <p>Search 8,000+ UMD courses with live data: prereqs, gen-ed codes, average GPAs, and professor history from PlanetTerp.</p>
+          <span class="feat-link">Search courses →</span>
+        </a>
+        <a href="pages/advisor.html" class="feature-card">
+          <div class="feat-icon">🤖</div>
+          <h3>AI Advisor Chat</h3>
+          <p>Ask anything — course recommendations, professor tips, gen-ed strategies, graduation planning. Your advisor knows UMD inside out.</p>
+          <span class="feat-link">Chat with advisor →</span>
+        </a>
+        <a href="pages/audit.html" class="feature-card">
+          <div class="feat-icon">📊</div>
+          <h3>Degree Audit</h3>
+          <p>Track your progress against CORE gen-ed and major requirements. See what you've done, what's left, and when you'll graduate.</p>
+          <span class="feat-link">View audit →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ─────────────────────────────────────────── -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo-badge">UMD</span>
+        <span class="logo-text">TerpAdvisor</span>
+      </div>
+      <p class="footer-note">Built with data from <a href="https://umd.io" target="_blank">umd.io</a> and <a href="https://planetterp.com" target="_blank">PlanetTerp</a>. Not affiliated with the University of Maryland.</p>
+      <p class="footer-note footer-copy">Fear the Turtle 🐢</p>
+    </div>
+  </footer>
+
+  <script src="js/nav.js"></script>
+</body>
+</html>
