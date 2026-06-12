@@ -31,7 +31,7 @@ async function claudeChat(messages, system = '') {
     messages,
   };
   if (system) body.system = system;
-  const r = await fetch('https://api.anthropic.com/v1/messages', {
+  const r = await fetch('/api/claude', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
@@ -41,7 +41,7 @@ async function claudeChat(messages, system = '') {
 }
 
 async function claudeJSON(prompt, maxTokens = 2000) {
-  const r = await fetch('https://api.anthropic.com/v1/messages', {
+  const r = await fetch('/api/claude', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
